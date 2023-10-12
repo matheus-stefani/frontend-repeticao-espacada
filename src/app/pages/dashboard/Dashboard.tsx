@@ -1,15 +1,18 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { TarefasService } from "../../shared/services/api/tarefas/TarefasService";
+import { ApiException } from "../../shared/services/api/ApiException";
 
-interface IlistItem {
+interface ITarefaIngles {
+  id?: number;
   nome: string;
   link: string;
   dias: number;
-  isSelected: boolean;
+  isSelected?: boolean;
 }
 
 export const Dashboard = () => {
-  const [lista, setLista] = useState<IlistItem[]>([]);
-  const [nome, setNome] = useState<IlistItem>();
+  const [lista, setLista] = useState<ITarefaIngles[]>([]);
+  const [nome, setNome] = useState<ITarefaIngles>();
 
   const handleClick = () => {
     setLista((old) => {
@@ -19,6 +22,17 @@ export const Dashboard = () => {
     });
     setNome({ dias: 0, isSelected: false, link: "", nome: "" });
   };
+
+  useEffect(()=>{
+    TarefasService.getAll().then((data)=>{
+      if(data instanceof ApiException){
+        alert(data.message)
+      }
+      else{
+        setLista(data)
+      }
+    }).catch(console.log);
+  },[])
   return (
     <div>
       <label>Insira um nome:</label>
