@@ -11,6 +11,7 @@ interface ITarefaIngles {
 
 const getAll = async (): Promise<ITarefaIngles[] | ApiException> => {
   try {
+    await Api().put("/tarefas-ingles-atualizar-dias");
     const { data } = await Api().get("/tarefas-ingles");
     
     return data;
