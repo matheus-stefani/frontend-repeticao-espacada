@@ -106,7 +106,7 @@ export const Dashboard = () => {
               
               <li key={e.nome}>Nome: {e.nome}</li>
               <li key={e.link}>Link: {e.link}</li>
-              <li key={e.dias}>Dias: {e.dias}</li>
+              <li key={e.dias === 0 ? 'Revisar hoje' : e.dias}>Dias: {e.dias}</li>
               <li key={i}>{e.isSelected ? 'true' : 'false'}</li>
            
             </>
