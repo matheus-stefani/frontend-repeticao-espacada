@@ -16,23 +16,32 @@ export const Dashboard = () => {
 
   const handleClick = () => {
     setLista((old) => {
-      if(!nome?.nome)return old;
-      if (old.some((e)=>e.nome===nome?.nome || e.link===nome?.link || e.dias===nome?.dias )) return old;
+      if (!nome?.nome) return old;
+      if (
+        old.some(
+          (e) =>
+            e.nome === nome?.nome ||
+            e.link === nome?.link ||
+            e.dias === nome?.dias
+        )
+      )
+        return old;
       return [...old, nome];
     });
     setNome({ dias: 0, isSelected: false, link: "", nome: "" });
   };
 
-  useEffect(()=>{
-    TarefasService.getAll().then((data)=>{
-      if(data instanceof ApiException){
-        alert(data.message)
-      }
-      else{
-        setLista(data)
-      }
-    }).catch(console.log);
-  },[])
+  useEffect(() => {
+    TarefasService.getAll()
+      .then((data) => {
+        if (data instanceof ApiException) {
+          alert(data.message);
+        } else {
+          setLista(data);
+        }
+      })
+      .catch(console.log);
+  }, []);
   return (
     <div>
       <label>Insira um nome:</label>
@@ -89,26 +98,33 @@ export const Dashboard = () => {
 
       <button onClick={handleClick}>Clique</button>
 
-      <p>{lista.filter((e)=> e.isSelected).length}</p>
+      <p>{lista.filter((e) => e.isSelected).length}</p>
 
       <ul>
         {lista.map((e, i) => {
           return (
             <>
-            <input type="checkbox" checked={e.isSelected} onChange={()=> setLista((old)=>{
-              
-                return old.map((j)=>{
-                  const newSelected = j.nome === e.nome ? !j.isSelected : j.isSelected;
+              <input
+                type="checkbox"
+                checked={e.isSelected}
+                onChange={() =>
+                  setLista((old) => {
+                    return old.map((j) => {
+                      const newSelected =
+                        j.nome === e.nome ? !j.isSelected : j.isSelected;
 
-                  return {...j,isSelected: newSelected}
-                })
-            })}/>
-              
+                      return { ...j, isSelected: newSelected };
+                    });
+                  })
+                }
+              />
+
               <li key={e.nome}>Nome: {e.nome}</li>
               <li key={e.link}>Link: {e.link}</li>
-              <li key={e.dias === 0 ? 'Revisar hoje' : e.dias}>Dias: {e.dias}</li>
-              <li key={i}>{e.isSelected ? 'true' : 'false'}</li>
-           
+              <li key={e.dias}>
+                Dias: {e.dias === 0 ? "Revisar hoje" : e.dias}
+              </li>
+              <li key={i}>{e.isSelected ? "true" : "false"}</li>
             </>
           );
         })}
